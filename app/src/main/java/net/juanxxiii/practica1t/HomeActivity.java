@@ -1,18 +1,24 @@
 package net.juanxxiii.practica1t;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.view.menu.MenuView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import android.Manifest;
 import android.content.BroadcastReceiver;
+import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -63,20 +69,35 @@ public class HomeActivity extends AppCompatActivity {
         LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,
                 new IntentFilter(INTENT_LOCALIZATION_ACTION));
 
-        Button btnShowLocationInOpenStreetMapsActivity = (Button) findViewById(R.id.btnShowOpenStreetMaps);
+    }
 
-        btnShowLocationInOpenStreetMapsActivity.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG,"Value of latitude: ".concat(String.valueOf(latitude)));
-                Intent locationIntent = new Intent(HomeActivity.this, MapActivity.class);
-                locationIntent.putExtra(TITLE_KEY,TITLE);
-                locationIntent.putExtra(DESCRIPTION_KEY,DESCRIPTION);
-                locationIntent.putExtra(LATITUDE, latitude);
-                locationIntent.putExtra(LONGITUDE, longitude);
-                startActivity(locationIntent);
-            }
-        });
+    private void startCurrentLocation() {
+        Log.d(TAG,"Value of latitude: ".concat(String.valueOf(latitude)));
+        Intent locationIntent = new Intent(HomeActivity.this, MapActivity.class);
+        locationIntent.putExtra(TITLE_KEY,TITLE);
+        locationIntent.putExtra(DESCRIPTION_KEY,DESCRIPTION);
+        locationIntent.putExtra(LATITUDE, latitude);
+        locationIntent.putExtra(LONGITUDE, longitude);
+        startActivity(locationIntent);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.navigation_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        switch (item.getItemId()){
+            case R.id.currentLocation:
+                startCurrentLocation();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {

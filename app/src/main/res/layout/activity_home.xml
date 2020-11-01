@@ -5,11 +5,6 @@
     android:layout_height="match_parent"
     tools:context=".HomeActivity">
 
-    <Button
-        android:id="@+id/btnShowOpenStreetMaps"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/btnShowOpenStreetMaps"/>
     <include
         layout="@layout/menu"
         android:layout_width="match_parent"

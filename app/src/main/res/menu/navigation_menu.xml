@@ -10,8 +10,8 @@
         android:title="Save location"
         />
     <item
-    android:id="@+id/sportFacilities"
-    android:title="Sport facilities"
+        android:id="@+id/sportFacilities"
+        android:title="Sport facilities"
     />
     <item
         android:id="@+id/sportsPools"
