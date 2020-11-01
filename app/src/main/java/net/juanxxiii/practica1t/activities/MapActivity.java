@@ -1,10 +1,12 @@
-package net.juanxxiii.practica1t;
+package net.juanxxiii.practica1t.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+
+import net.juanxxiii.practica1t.R;
 
 import org.osmdroid.config.Configuration;
 import org.osmdroid.util.GeoPoint;

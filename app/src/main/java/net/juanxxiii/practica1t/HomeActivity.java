@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import net.juanxxiii.practica1t.activities.MapActivity;
 import net.juanxxiii.practica1t.services.GpsService;
 
 import static net.juanxxiii.practica1t.common.Constants.INTENT_LOCALIZATION_ACTION;
