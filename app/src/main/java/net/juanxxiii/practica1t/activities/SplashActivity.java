@@ -1,10 +1,12 @@
-package net.juanxxiii.practica1t;
+package net.juanxxiii.practica1t.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+
+import net.juanxxiii.practica1t.R;
 
 public class SplashActivity extends AppCompatActivity {
 

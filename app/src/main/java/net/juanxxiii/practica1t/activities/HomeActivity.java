@@ -1,15 +1,13 @@
-package net.juanxxiii.practica1t;
+package net.juanxxiii.practica1t.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.view.menu.MenuView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import android.Manifest;
 import android.content.BroadcastReceiver;
-import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -20,18 +18,15 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
-import net.juanxxiii.practica1t.activities.MapActivity;
+import net.juanxxiii.practica1t.R;
 import net.juanxxiii.practica1t.services.GpsService;
 
 import static net.juanxxiii.practica1t.common.Constants.INTENT_LOCALIZATION_ACTION;
 import static net.juanxxiii.practica1t.common.Constants.LATITUDE;
 import static net.juanxxiii.practica1t.common.Constants.LONGITUDE;
-import android.view.View;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
