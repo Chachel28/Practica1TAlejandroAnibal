@@ -1,4 +1,4 @@
-package net.juanxxiii.practica1t;
+package net.juanxxiii.practica1t.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,16 +14,21 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
-import net.juanxxiii.practica1t.activities.MapActivity;
+import net.juanxxiii.practica1t.R;
 import net.juanxxiii.practica1t.services.GpsService;
 
 import static net.juanxxiii.practica1t.common.Constants.INTENT_LOCALIZATION_ACTION;
 import static net.juanxxiii.practica1t.common.Constants.LATITUDE;
 import static net.juanxxiii.practica1t.common.Constants.LONGITUDE;
+
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -40,6 +45,14 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        final DrawerLayout drawerLayout = findViewById(R.id.drawerLayout);
+        findViewById(R.id.ImageMenu).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                drawerLayout.openDrawer(GravityCompat.START);
+            }
+        });
+
 
         if (PackageManager.PERMISSION_GRANTED != ContextCompat.checkSelfPermission(HomeActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)) {
             ActivityCompat.requestPermissions(HomeActivity.this,
@@ -51,20 +64,35 @@ public class HomeActivity extends AppCompatActivity {
         LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,
                 new IntentFilter(INTENT_LOCALIZATION_ACTION));
 
-        Button btnShowLocationInOpenStreetMapsActivity = (Button) findViewById(R.id.btnShowOpenStreetMaps);
+    }
 
-        btnShowLocationInOpenStreetMapsActivity.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG,"Value of latitude: ".concat(String.valueOf(latitude)));
-                Intent locationIntent = new Intent(HomeActivity.this, MapActivity.class);
-                locationIntent.putExtra(TITLE_KEY,TITLE);
-                locationIntent.putExtra(DESCRIPTION_KEY,DESCRIPTION);
-                locationIntent.putExtra(LATITUDE, latitude);
-                locationIntent.putExtra(LONGITUDE, longitude);
-                startActivity(locationIntent);
-            }
-        });
+    private void startCurrentLocation() {
+        Log.d(TAG,"Value of latitude: ".concat(String.valueOf(latitude)));
+        Intent locationIntent = new Intent(HomeActivity.this, MapActivity.class);
+        locationIntent.putExtra(TITLE_KEY,TITLE);
+        locationIntent.putExtra(DESCRIPTION_KEY,DESCRIPTION);
+        locationIntent.putExtra(LATITUDE, latitude);
+        locationIntent.putExtra(LONGITUDE, longitude);
+        startActivity(locationIntent);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.navigation_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        switch (item.getItemId()){
+            case R.id.currentLocation:
+                startCurrentLocation();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {

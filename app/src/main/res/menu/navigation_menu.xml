@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/currentLocation"
+        android:title="Current location"
+        />
+    <item
+        android:id="@+id/saveLocation"
+        android:title="Save location"
+        />
+    <item
+        android:id="@+id/sportFacilities"
+        android:title="Sport facilities"
+    />
+    <item
+        android:id="@+id/sportsPools"
+        android:title="Sports pools"
+        />
+    <item
+        android:id="@+id/relevantSites"
+        android:title="Relevant sites"
+        />
+    <item
+        android:id="@+id/favourites"
+        android:title="Favourites"
+        />
+</menu>

@@ -18,9 +18,8 @@ import org.osmdroid.views.overlay.OverlayItem;
 
 import java.util.ArrayList;
 
-import static net.juanxxiii.practica1t.HomeActivity.DESCRIPTION_KEY;
-import static net.juanxxiii.practica1t.HomeActivity.TITLE_KEY;
-import static net.juanxxiii.practica1t.common.Constants.INTENT_LOCALIZATION_ACTION;
+import static net.juanxxiii.practica1t.activities.HomeActivity.DESCRIPTION_KEY;
+import static net.juanxxiii.practica1t.activities.HomeActivity.TITLE_KEY;
 import static net.juanxxiii.practica1t.common.Constants.LATITUDE;
 import static net.juanxxiii.practica1t.common.Constants.LONGITUDE;
 
