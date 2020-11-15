@@ -18,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import net.juanxxiii.practica1t.R;
@@ -37,8 +38,8 @@ public class HomeActivity extends AppCompatActivity {
     public static final String TITLE = "My location";
     public static final String DESCRIPTION_KEY = "DESCRIPTION_KEY";
     public static final String DESCRIPTION = "This is my location";
-    Double latitude = 0.0;
-    Double longitude = 0.0;
+    Double latitude = 40.0;
+    Double longitude = 40.0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +54,6 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-
         if (PackageManager.PERMISSION_GRANTED != ContextCompat.checkSelfPermission(HomeActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)) {
             ActivityCompat.requestPermissions(HomeActivity.this,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
@@ -64,13 +64,18 @@ public class HomeActivity extends AppCompatActivity {
         LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,
                 new IntentFilter(INTENT_LOCALIZATION_ACTION));
 
+        Button btnMapa = findViewById(R.id.btnMapa);
+        btnMapa.setOnClickListener(v -> {
+            startCurrentLocation();
+        });
+
     }
 
     private void startCurrentLocation() {
         Log.d(TAG,"Value of latitude: ".concat(String.valueOf(latitude)));
         Intent locationIntent = new Intent(HomeActivity.this, MapActivity.class);
-        locationIntent.putExtra(TITLE_KEY,TITLE);
-        locationIntent.putExtra(DESCRIPTION_KEY,DESCRIPTION);
+        locationIntent.putExtra(TITLE_KEY, TITLE);
+        locationIntent.putExtra(DESCRIPTION_KEY, DESCRIPTION);
         locationIntent.putExtra(LATITUDE, latitude);
         locationIntent.putExtra(LONGITUDE, longitude);
         startActivity(locationIntent);
@@ -88,7 +93,6 @@ public class HomeActivity extends AppCompatActivity {
 
         switch (item.getItemId()){
             case R.id.currentLocation:
-                startCurrentLocation();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -100,6 +104,7 @@ public class HomeActivity extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
             latitude = intent.getDoubleExtra(LATITUDE,0);
             longitude = intent.getDoubleExtra(LONGITUDE,0);
+            Log.d(TAG, "recibidor de mensajes ".concat(String.valueOf(latitude)));
         }
     };
 
@@ -109,7 +114,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         if (requestCode == 1) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Toast.makeText(getApplicationContext(), R.string.gps_granted, Toast.LENGTH_SHORT).show();

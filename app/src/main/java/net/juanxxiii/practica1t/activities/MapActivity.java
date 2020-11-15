@@ -43,7 +43,6 @@ public class MapActivity extends AppCompatActivity {
 
         boolean add = mOverlayItems.add(new OverlayItem(getDataIntent.getStringExtra(TITLE_KEY), getDataIntent.getStringExtra(DESCRIPTION_KEY), geoPointMyPosition));
 
-
         ItemizedOverlayWithFocus<OverlayItem> mOverlay = new ItemizedOverlayWithFocus<OverlayItem>(mOverlayItems, new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
             @Override
             public boolean onItemSingleTapUp(int index, OverlayItem item) {
@@ -59,7 +58,6 @@ public class MapActivity extends AppCompatActivity {
         mOverlay.setFocusItemsOnTap(true);
         mMapView.getOverlays().add(mOverlay);
     }
-
 
     public void generateOpenStreetMapViewAndMapController() {
         mMapView = (MapView) findViewById(R.id.openmapview);
