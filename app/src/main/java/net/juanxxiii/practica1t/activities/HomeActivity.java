@@ -107,6 +107,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 startCurrentLocation();
                 break;
             case R.id.favourites:
+                Intent favouritesIntent = new Intent(HomeActivity.this, FavouritesActivity.class);
+                startActivity(favouritesIntent);
                 break;
             default:
                 Log.d(TAG,"seleccion menu" +  item.toString());
