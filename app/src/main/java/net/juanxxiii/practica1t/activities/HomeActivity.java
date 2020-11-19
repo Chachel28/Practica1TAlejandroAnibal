@@ -106,6 +106,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             case R.id.currentLocation:
                 startCurrentLocation();
                 break;
+            case R.id.favourites:
+                break;
             default:
                 Log.d(TAG,"seleccion menu" +  item.toString());
         }

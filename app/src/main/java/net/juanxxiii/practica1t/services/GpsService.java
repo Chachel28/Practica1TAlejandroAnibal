@@ -57,7 +57,8 @@ public class GpsService extends Service implements LocationListener {
             Intent callGPSSettingIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
             callGPSSettingIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(callGPSSettingIntent);
-        } else {
+        }
+        if(gpsProvider){
             Log.d("d", "Service: provider enabled");
             mLocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1, 100, this);
         }
