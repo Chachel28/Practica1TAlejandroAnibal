@@ -50,13 +50,19 @@ public class GpsService extends Service implements LocationListener {
     @SuppressLint("MissingPermission")
     private void startLocation() {
         mLocManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        if (!mLocManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+        boolean gpsProvider = mLocManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        boolean networkProvider = mLocManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+        if (!gpsProvider) {
             Log.d("d", "Service: provider not enabled");
             Intent callGPSSettingIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
             callGPSSettingIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(callGPSSettingIntent);
         } else {
             Log.d("d", "Service: provider enabled");
+            mLocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1, 100, this);
+        }
+        if (networkProvider){
+            Log.d("d", "Service: network provider enabled");
             mLocManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1, 100, this);
         }
     }
