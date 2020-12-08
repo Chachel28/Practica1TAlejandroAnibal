@@ -17,7 +17,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar">
-        <activity android:name=".activities.FavouritesActivity"></activity>
+        <activity android:name=".activities.RelevantSitesActivity"></activity>
+        <activity android:name=".activities.FavouritesActivity" />
 
         <service
             android:name=".services.GpsService"

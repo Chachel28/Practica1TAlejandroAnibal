@@ -4,12 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.PoolsFacilitesActivity">
+    tools:context=".activities.RelevantSitesActivity">
 
     <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:layout_editor_absoluteX="203dp"
         tools:layout_editor_absoluteY="361dp"
-        android:id="@+id/listViewFacilities"/>
+        android:id="@+id/listViewRelevantSites"/>
+
 </androidx.drawerlayout.widget.DrawerLayout>
