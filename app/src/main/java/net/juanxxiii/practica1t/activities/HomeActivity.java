@@ -63,7 +63,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 new IntentFilter(INTENT_LOCALIZATION_ACTION));
     }
 
-    private void startCurrentLocation() {
+    public void startCurrentLocation() {
         Log.d(TAG, "Value of latitude: ".concat(String.valueOf(latitude)));
         Intent locationIntent = new Intent(HomeActivity.this, MapActivity.class);
         locationIntent.putExtra(TITLE_KEY, TITLE);
