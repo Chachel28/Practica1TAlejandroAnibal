@@ -1,32 +1,47 @@
 package net.juanxxiii.practica1t.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import net.juanxxiii.practica1t.Objects.Facilities;
+import androidx.appcompat.app.AppCompatActivity;
+
 import net.juanxxiii.practica1t.R;
+import net.juanxxiii.practica1t.common.Constants;
+import net.juanxxiii.practica1t.domain.Graph;
+import net.juanxxiii.practica1t.domain.JsonResponse;
+import net.juanxxiii.practica1t.interfaces.ApiDatosMadrid;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
+import static net.juanxxiii.practica1t.common.Constants.LATITUDE;
+import static net.juanxxiii.practica1t.common.Constants.LONGITUDE;
 
 public class PoolsActivity extends AppCompatActivity {
 
     public ListView listview;
-    public ArrayList<Facilities> facilities;
+    public List<Graph> facilities;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pools_facilites);
 
-        listview = findViewById(R.id.listViewFacilities);
+        listview = findViewById(R.id.listViewPoolsFacilities);
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -44,31 +59,43 @@ public class PoolsActivity extends AppCompatActivity {
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                guardarFavoritos();
+
                             }
                         })
                         .setNegativeButton("No", null).show();
                 return true;
             }
         });
-        Facilities facilities1 = new Facilities();
-        facilities1.setName("Piscina cutre");
-        facilities1.setLatitude(14.098);
-        facilities1.setLongitude(35.976);
-        facilities1.setText("Vaya mierda de piscina");
 
-        facilities = new ArrayList<Facilities>();
-        facilities.add(facilities1);
+        Intent intent = getIntent();
+        double latitude = intent.getDoubleExtra(LATITUDE, 0);
+        double longitude = intent.getDoubleExtra(LONGITUDE, 0);
 
-        ArrayAdapter<Facilities> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, facilities);
+        getAllFacilites(latitude, longitude);
+
+        ArrayAdapter<Graph> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, facilities);
         listview.setAdapter(adapter);
     }
 
-    public void guardarFavoritos(){
-        Facilities facility = new Facilities();
-        SharedPreferences favourites =
-                getSharedPreferences("Favoritos", Context.MODE_PRIVATE);
+    private void getAllFacilites(Double latitude, Double longitude){
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(Constants.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
 
-        facility.setName(listview.getSelectedItem()./*el getter del nombre*/toString());
+        ApiDatosMadrid apiDatosMadrid = retrofit.create(ApiDatosMadrid.class);
+        apiDatosMadrid.getPoolList(latitude,longitude, Constants.DISTANCE).enqueue(new Callback<JsonResponse>() {
+            @Override
+            public void onResponse(Call<JsonResponse> call, Response<JsonResponse> response) {
+                if (response.body() != null) {
+                    facilities = response.body().graph;
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonResponse> call, Throwable t) {
+
+            }
+        });
     }
 }

@@ -59,7 +59,7 @@ public class GpsService extends Service implements LocationListener {
             startActivity(callGPSSettingIntent);
         }
         if(gpsProvider){
-            Log.d("d", "Service: provider enabled");
+            Log.d("d", "Service: gps provider enabled");
             mLocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1, 100, this);
         }
         if (networkProvider){

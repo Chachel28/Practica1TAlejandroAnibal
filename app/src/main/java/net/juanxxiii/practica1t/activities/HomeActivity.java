@@ -64,7 +64,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void startCurrentLocation() {
-        Log.d(TAG, "Value of latitude: ".concat(String.valueOf(latitude)));
         Intent locationIntent = new Intent(HomeActivity.this, MapActivity.class);
         locationIntent.putExtra(TITLE_KEY, TITLE);
         locationIntent.putExtra(DESCRIPTION_KEY, DESCRIPTION);
@@ -78,7 +77,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         public void onReceive(Context context, Intent intent) {
             latitude = intent.getDoubleExtra(LATITUDE,0);
             longitude = intent.getDoubleExtra(LONGITUDE,0);
-            Log.d(TAG, "recibidor de mensajes ".concat(String.valueOf(latitude)));
         }
     };
 
@@ -110,8 +108,11 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(favouritesIntent);
                 break;
             case R.id.sportFacilities:
-                Intent sportIntent = new Intent(HomeActivity.this, PoolsActivity.class);
+                Intent sportIntent = new Intent(HomeActivity.this, SportsCentersActivity.class);
+                sportIntent.putExtra(LATITUDE, latitude);
+                sportIntent.putExtra(LONGITUDE, longitude);
                 startActivity(sportIntent);
+                break;
             default:
                 Log.d(TAG,"seleccion menu" +  item.toString());
         }
