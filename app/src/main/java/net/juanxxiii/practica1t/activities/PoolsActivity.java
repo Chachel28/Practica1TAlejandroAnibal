@@ -72,9 +72,6 @@ public class PoolsActivity extends AppCompatActivity {
         double longitude = intent.getDoubleExtra(LONGITUDE, 0);
 
         getAllFacilites(latitude, longitude);
-
-        ArrayAdapter<Graph> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, facilities);
-        listview.setAdapter(adapter);
     }
 
     private void getAllFacilites(Double latitude, Double longitude){
@@ -89,6 +86,8 @@ public class PoolsActivity extends AppCompatActivity {
             public void onResponse(Call<JsonResponse> call, Response<JsonResponse> response) {
                 if (response.body() != null) {
                     facilities = response.body().graph;
+                    ArrayAdapter<Graph> adapter = new ArrayAdapter<>(PoolsActivity.this, android.R.layout.simple_list_item_1, facilities);
+                    listview.setAdapter(adapter);
                 }
             }
 

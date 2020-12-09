@@ -12,12 +12,18 @@ import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import net.juanxxiii.practica1t.R;
 import net.juanxxiii.practica1t.common.Constants;
 import net.juanxxiii.practica1t.domain.Graph;
 import net.juanxxiii.practica1t.domain.JsonResponse;
 import net.juanxxiii.practica1t.interfaces.ApiDatosMadrid;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
 import java.util.List;
 
 import retrofit2.Call;
@@ -38,7 +44,7 @@ public class SportsCentersActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_pools_facilites);
+        setContentView(R.layout.activity_sport_facilities);
 
         listview = findViewById(R.id.listViewPoolsFacilities);
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -47,6 +53,13 @@ public class SportsCentersActivity extends AppCompatActivity {
                 //Funcion para ir a dicha ubicación
             }
         });
+
+        Intent intent = getIntent();
+        double latitude = intent.getDoubleExtra(LATITUDE, 0);
+        double longitude = intent.getDoubleExtra(LONGITUDE, 0);
+        Log.d(TAG, "sport " + latitude + " - " + longitude);
+
+        getAllFacilites(latitude, longitude);
 
         listview.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
@@ -58,27 +71,16 @@ public class SportsCentersActivity extends AppCompatActivity {
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-
+                                write(getFilesDir()+"/favourites.json", sportCenters);
                             }
                         })
                         .setNegativeButton("No", null).show();
                 return true;
             }
         });
-
-
-        Intent intent = getIntent();
-        double latitude = intent.getDoubleExtra(LATITUDE, 0);
-        double longitude = intent.getDoubleExtra(LONGITUDE, 0);
-        Log.d(TAG, "sport " + latitude + " - " + longitude);
-
-        getAllFacilites(latitude, longitude);
-
-        ArrayAdapter<Graph> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, sportCenters);
-        listview.setAdapter(adapter);
     }
 
-    private void getAllFacilites(Double latitude, Double longitude){
+    private void getAllFacilites(Double latitude, Double longitude) {
         Log.d(TAG, "Estoy en getAllFacilities");
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(Constants.BASE_URL)
@@ -86,12 +88,14 @@ public class SportsCentersActivity extends AppCompatActivity {
                 .build();
 
         ApiDatosMadrid apiDatosMadrid = retrofit.create(ApiDatosMadrid.class);
-        apiDatosMadrid.getSportCenterList(latitude,longitude, Constants.DISTANCE).enqueue(new Callback<JsonResponse>() {
+        apiDatosMadrid.getSportCenterList(latitude, longitude, Constants.DISTANCE).enqueue(new Callback<JsonResponse>() {
             @Override
             public void onResponse(Call<JsonResponse> call, Response<JsonResponse> response) {
                 Log.d(TAG, "respuesta positiva peticion");
                 if (response.body() != null) {
                     sportCenters = response.body().graph;
+                    ArrayAdapter<Graph> adapter = new ArrayAdapter<>(SportsCentersActivity.this, android.R.layout.simple_list_item_1, sportCenters);
+                    listview.setAdapter(adapter);
                 }
             }
 
@@ -100,5 +104,17 @@ public class SportsCentersActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    //getFileDir()+/user.json
+    public void write(String file, List<Graph> objeto) {
+        Writer writer = null;
+        try {
+            writer = new FileWriter(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        gson.toJson(objeto, writer);
     }
 }

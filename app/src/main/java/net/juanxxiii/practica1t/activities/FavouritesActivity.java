@@ -10,9 +10,18 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import net.juanxxiii.practica1t.R;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import net.juanxxiii.practica1t.R;
+import net.juanxxiii.practica1t.domain.Graph;
+
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.Reader;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.List;
 
 public class FavouritesActivity extends AppCompatActivity {
 
@@ -61,4 +70,16 @@ public class FavouritesActivity extends AppCompatActivity {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, favourites);
         listview.setAdapter(adapter);
     }
+
+    /*public void read(String file) {
+        Reader reader = null;
+        try {
+            reader = new FileReader(file);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        Gson gson = new Gson();
+        Type types = new TypeToken<ArrayList<Graph>().getTypes();
+        Graph graph = gson.fromJson(reader, types);
+    }*/
 }

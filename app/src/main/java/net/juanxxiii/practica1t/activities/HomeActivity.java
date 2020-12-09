@@ -113,6 +113,12 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 sportIntent.putExtra(LONGITUDE, longitude);
                 startActivity(sportIntent);
                 break;
+            case R.id.sportPools:
+                Intent poolIntent = new Intent(HomeActivity.this, PoolsActivity.class);
+                poolIntent.putExtra(LATITUDE, latitude);
+                poolIntent.putExtra(LONGITUDE, longitude);
+                startActivity(poolIntent);
+                break;
             default:
                 Log.d(TAG,"seleccion menu" +  item.toString());
         }
