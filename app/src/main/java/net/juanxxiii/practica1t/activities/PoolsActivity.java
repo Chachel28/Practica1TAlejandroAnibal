@@ -3,21 +3,24 @@ package net.juanxxiii.practica1t.activities;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import net.juanxxiii.practica1t.Objects.Facilities;
 import net.juanxxiii.practica1t.R;
 
 import java.util.ArrayList;
 
-public class PoolsFacilitesActivity extends AppCompatActivity {
+public class PoolsActivity extends AppCompatActivity {
 
     public ListView listview;
-    public ArrayList<String> facilities;
+    public ArrayList<Facilities> facilities;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,32 +37,38 @@ public class PoolsFacilitesActivity extends AppCompatActivity {
         listview.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                new AlertDialog.Builder(PoolsFacilitesActivity.this)
-                        .setIcon(android.R.drawable.btn_star)
-                        .setTitle("Remove from favourites?")
-                        .setMessage("Are you sure you want to remove this from your favourites page?")
+                new AlertDialog.Builder(PoolsActivity.this)
+                        .setIcon(android.R.drawable.star_big_on)
+                        .setTitle("Add to favourites?")
+                        .setMessage("Are you sure you want add this to your favourites page?")
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                //Función de agregar a favoritos
+                                guardarFavoritos();
                             }
                         })
                         .setNegativeButton("No", null).show();
                 return true;
             }
         });
+        Facilities facilities1 = new Facilities();
+        facilities1.setName("Piscina cutre");
+        facilities1.setLatitude(14.098);
+        facilities1.setLongitude(35.976);
+        facilities1.setText("Vaya mierda de piscina");
 
-        facilities = new ArrayList<String>();
-        facilities.add("Piscina");
-        facilities.add("Polideportivo");
-        facilities.add("Piscina");
-        facilities.add("Polideportivo");
-        facilities.add("Piscina");
-        facilities.add("Polideportivo");
-        facilities.add("Piscina");
-        facilities.add("Polideportivo");
+        facilities = new ArrayList<Facilities>();
+        facilities.add(facilities1);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, facilities);
+        ArrayAdapter<Facilities> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, facilities);
         listview.setAdapter(adapter);
+    }
+
+    public void guardarFavoritos(){
+        Facilities facility = new Facilities();
+        SharedPreferences favourites =
+                getSharedPreferences("Favoritos", Context.MODE_PRIVATE);
+
+        facility.setName(listview.getSelectedItem()./*el getter del nombre*/toString());
     }
 }

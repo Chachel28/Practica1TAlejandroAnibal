@@ -9,7 +9,6 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -110,6 +109,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 Intent favouritesIntent = new Intent(HomeActivity.this, FavouritesActivity.class);
                 startActivity(favouritesIntent);
                 break;
+            case R.id.sportFacilities:
+                Intent sportIntent = new Intent(HomeActivity.this, PoolsActivity.class);
+                startActivity(sportIntent);
             default:
                 Log.d(TAG,"seleccion menu" +  item.toString());
         }
