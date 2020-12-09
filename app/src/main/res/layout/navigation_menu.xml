@@ -5,26 +5,26 @@
 
     <item
         android:id="@+id/currentLocation"
-        android:title="@strings/currentLocation"
+        android:title="@string/currentLocation"
         />
     <item
         android:id="@+id/saveLocation"
-        android:title="@strings/saveLocation"
+        android:title="@string/saveLocation"
         />
     <item
         android:id="@+id/sportFacilities"
-        android:title="@strings/sportFacilities"
+        android:title="@string/sportFacilities"
     />
     <item
         android:id="@+id/sportPools"
-        android:title="@strings/sportPools"
+        android:title="@string/sportPools"
         />
     <item
         android:id="@+id/relevantSites"
-        android:title="@strings/relevantSites"
+        android:title="@string/relevantSites"
         />
     <item
         android:id="@+id/favourites"
-        android:title="@strings/favourites"
+        android:title="@string/favourites"
         />
 </menu>

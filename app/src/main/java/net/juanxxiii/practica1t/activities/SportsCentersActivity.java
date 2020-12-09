@@ -1,12 +1,8 @@
 package net.juanxxiii.practica1t.activities;
 
 import android.app.AlertDialog;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -15,16 +11,13 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
-import net.juanxxiii.practica1t.Objects.Facility;
 import net.juanxxiii.practica1t.R;
 import net.juanxxiii.practica1t.common.Constants;
 import net.juanxxiii.practica1t.domain.Graph;
 import net.juanxxiii.practica1t.domain.JsonResponse;
 import net.juanxxiii.practica1t.interfaces.ApiDatosMadrid;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -33,7 +26,6 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-import static net.juanxxiii.practica1t.common.Constants.INTENT_LOCALIZATION_ACTION;
 import static net.juanxxiii.practica1t.common.Constants.LATITUDE;
 import static net.juanxxiii.practica1t.common.Constants.LONGITUDE;
 
@@ -41,7 +33,6 @@ public class SportsCentersActivity extends AppCompatActivity {
 
     public final String TAG = getClass().getName();
     public ListView listview;
-    public ArrayList<Facility> facilities;
     public List<Graph> sportCenters;
 
     @Override
@@ -67,7 +58,7 @@ public class SportsCentersActivity extends AppCompatActivity {
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                guardarFavoritos();
+
                             }
                         })
                         .setNegativeButton("No", null).show();
@@ -75,17 +66,6 @@ public class SportsCentersActivity extends AppCompatActivity {
             }
         });
 
-        Facility facility1 = new Facility();
-        facility1.setName("Piscina cutre");
-        facility1.setLatitude(14.098);
-        facility1.setLongitude(35.976);
-        facility1.setText("Vaya mierda de piscina");
-
-        facilities = new ArrayList<>();
-        facilities.add(facility1);
-
-        ArrayAdapter<Facility> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, facilities);
-        listview.setAdapter(adapter);
 
         Intent intent = getIntent();
         double latitude = intent.getDoubleExtra(LATITUDE, 0);
@@ -93,13 +73,9 @@ public class SportsCentersActivity extends AppCompatActivity {
         Log.d(TAG, "sport " + latitude + " - " + longitude);
 
         getAllFacilites(latitude, longitude);
-    }
 
-    public void guardarFavoritos(){
-        Facility facility = new Facility();
-        SharedPreferences favourites =
-                getSharedPreferences("Favoritos", Context.MODE_PRIVATE);
-
+        ArrayAdapter<Graph> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, sportCenters);
+        listview.setAdapter(adapter);
     }
 
     private void getAllFacilites(Double latitude, Double longitude){
@@ -116,15 +92,12 @@ public class SportsCentersActivity extends AppCompatActivity {
                 Log.d(TAG, "respuesta positiva peticion");
                 if (response.body() != null) {
                     sportCenters = response.body().graph;
-                    Log.d(TAG, "sport " + latitude + " - "+ longitude);
-                    Log.d(TAG, "sport " + sportCenters);
                 }
             }
 
             @Override
             public void onFailure(Call<JsonResponse> call, Throwable t) {
-                Log.d(TAG, "respuesta negativa peticion");
-                Log.d(TAG, t.getMessage());
+
             }
         });
     }
