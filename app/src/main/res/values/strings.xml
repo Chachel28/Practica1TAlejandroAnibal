@@ -3,4 +3,10 @@
     <string name="btnShowOpenStreetMaps">Abrir boton</string>
     <string name="gps_granted">gps granted</string>
     <string name="gps_denied">gps denied</string>
+    <string name="currentLocation">Current location</string>
+    <string name="saveLocation">Save location</string>
+    <string name="sportFacilities">Sport facilities</string>
+    <string name="sportPools">Sports pools</string>
+    <string name="relevantSites">Relevant sites</string>
+    <string name="favourites">Favourites</string>
 </resources>

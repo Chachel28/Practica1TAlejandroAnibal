@@ -11,9 +11,9 @@ import retrofit2.http.Query;
 public interface ApiDatosMadrid {
     @Headers({"Accept: application/json, Content-Type: application/json"})
     @GET(Constants.ENDPOINT_PISCINAS)
-    Call<JsonResponse> getPoolList(@Query("latitud") long latitud, @Query("longitud") long longitud, @Query("distancia")int distancia);
+    Call<JsonResponse> getPoolList(@Query("latitud") double latitud, @Query("longitud") double longitud, @Query("distancia")long distancia);
 
     @Headers({"Accept: application/json, Content-Type: application/json"})
     @GET(Constants.ENDPOINT_CENTROS_DEPORTIVOS)
-    Call<JsonResponse> getSportCenterList(@Query("latitud") long latitud, @Query("longitud") long longitud, @Query("distancia")int distancia);
+    Call<JsonResponse> getSportCenterList(@Query("latitud") double latitud, @Query("longitud") double longitud, @Query("distancia")long distancia);
 }
