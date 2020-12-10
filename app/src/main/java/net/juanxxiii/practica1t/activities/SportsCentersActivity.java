@@ -3,6 +3,7 @@ package net.juanxxiii.practica1t.activities;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -24,6 +25,7 @@ import net.juanxxiii.practica1t.interfaces.ApiDatosMadrid;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.util.Collections;
 import java.util.List;
 
 import retrofit2.Call;
@@ -45,6 +47,8 @@ public class SportsCentersActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sport_facilities);
+        SharedPreferences favourites = getSharedPreferences("Favourites", MODE_PRIVATE);
+
 
         listview = findViewById(R.id.listViewPoolsFacilities);
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -64,6 +68,9 @@ public class SportsCentersActivity extends AppCompatActivity {
         listview.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                String selectedObject = (listview.getItemAtPosition(i)).toString();
+                Log.d(TAG, "Nombre: " + selectedObject);
+
                 new AlertDialog.Builder(SportsCentersActivity.this)
                         .setIcon(android.R.drawable.star_big_on)
                         .setTitle("Add to favourites?")
@@ -71,7 +78,11 @@ public class SportsCentersActivity extends AppCompatActivity {
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                write(getFilesDir()+"/favourites.json", sportCenters);
+                                SharedPreferences favourites = getSharedPreferences("Favourite", MODE_PRIVATE);
+                                SharedPreferences.Editor editor = favourites.edit();
+                                editor.putStringSet("Favourite", Collections.singleton(selectedObject));
+                                editor.apply();
+                                Log.d(TAG, "Guardado en favoritos: "+ selectedObject);
                             }
                         })
                         .setNegativeButton("No", null).show();

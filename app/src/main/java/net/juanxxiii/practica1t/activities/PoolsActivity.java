@@ -11,16 +11,20 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
 
 import net.juanxxiii.practica1t.R;
 import net.juanxxiii.practica1t.common.Constants;
 import net.juanxxiii.practica1t.domain.Graph;
 import net.juanxxiii.practica1t.domain.JsonResponse;
+import net.juanxxiii.practica1t.domain.MyLocation;
 import net.juanxxiii.practica1t.interfaces.ApiDatosMadrid;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import retrofit2.Call;
@@ -34,24 +38,31 @@ import static net.juanxxiii.practica1t.common.Constants.LONGITUDE;
 
 public class PoolsActivity extends AppCompatActivity {
 
+    public final String TAG = getClass().getName();
     public ListView listview;
     public List<Graph> facilities;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pools_facilites);
 
+
         listview = findViewById(R.id.listViewPoolsFacilities);
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                //Funcion para ir a dicha ubicación
+
             }
         });
 
         listview.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                String selectedObject = (listview.getItemAtPosition(i)).toString();
+                Log.d(TAG, "Nombre: " + selectedObject);
+
+
                 new AlertDialog.Builder(PoolsActivity.this)
                         .setIcon(android.R.drawable.star_big_on)
                         .setTitle("Add to favourites?")
@@ -59,7 +70,11 @@ public class PoolsActivity extends AppCompatActivity {
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-
+                                SharedPreferences favourites = getSharedPreferences("Favourite", MODE_PRIVATE);
+                                SharedPreferences.Editor editor = favourites.edit();
+                                editor.putStringSet("Favourite", Collections.singleton(selectedObject));
+                                editor.apply();
+                                Log.d(TAG, "Guardado en favoritos: "+ selectedObject);
                             }
                         })
                         .setNegativeButton("No", null).show();

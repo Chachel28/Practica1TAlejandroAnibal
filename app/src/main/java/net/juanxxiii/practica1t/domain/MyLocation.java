@@ -6,9 +6,7 @@ public class MyLocation {
 
     @Override
     public String toString() {
-        return "MyLocation{" +
-                "latitude=" + latitude +
-                ", longitude=" + longitude +
-                '}';
+        return latitude +
+                "," + longitude;
     }
 }
