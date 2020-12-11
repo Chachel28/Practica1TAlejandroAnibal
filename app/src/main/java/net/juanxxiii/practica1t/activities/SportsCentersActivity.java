@@ -1,6 +1,7 @@
 package net.juanxxiii.practica1t.activities;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -25,7 +26,6 @@ import net.juanxxiii.practica1t.interfaces.ApiDatosMadrid;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
-import java.util.Collections;
 import java.util.List;
 
 import retrofit2.Call;
@@ -47,8 +47,6 @@ public class SportsCentersActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sport_facilities);
-        SharedPreferences favourites = getSharedPreferences("Favourites", MODE_PRIVATE);
-
 
         listview = findViewById(R.id.listViewPoolsFacilities);
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -58,19 +56,17 @@ public class SportsCentersActivity extends AppCompatActivity {
             }
         });
 
-        Intent intent = getIntent();
-        double latitude = intent.getDoubleExtra(LATITUDE, 0);
-        double longitude = intent.getDoubleExtra(LONGITUDE, 0);
-        Log.d(TAG, "sport " + latitude + " - " + longitude);
+        SharedPreferences sharedPref2 = getApplicationContext().getSharedPreferences("LocationSaved", Context.MODE_PRIVATE);
+        String locationParseable = sharedPref2.getString(getString(R.string.saved_location), "");
+        String[] splitted = locationParseable.split(" ");
+        double latitude = Double.parseDouble(splitted[0]);
+        double longitude = Double.parseDouble(splitted[1]);
 
         getAllFacilites(latitude, longitude);
 
         listview.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                String selectedObject = (listview.getItemAtPosition(i)).toString();
-                Log.d(TAG, "Nombre: " + selectedObject);
-
                 new AlertDialog.Builder(SportsCentersActivity.this)
                         .setIcon(android.R.drawable.star_big_on)
                         .setTitle("Add to favourites?")
@@ -78,11 +74,7 @@ public class SportsCentersActivity extends AppCompatActivity {
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                SharedPreferences favourites = getSharedPreferences("Favourite", MODE_PRIVATE);
-                                SharedPreferences.Editor editor = favourites.edit();
-                                editor.putStringSet("Favourite", Collections.singleton(selectedObject));
-                                editor.apply();
-                                Log.d(TAG, "Guardado en favoritos: "+ selectedObject);
+
                             }
                         })
                         .setNegativeButton("No", null).show();
@@ -115,17 +107,5 @@ public class SportsCentersActivity extends AppCompatActivity {
 
             }
         });
-    }
-
-    //getFileDir()+/user.json
-    public void write(String file, List<Graph> objeto) {
-        Writer writer = null;
-        try {
-            writer = new FileWriter(file);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        gson.toJson(objeto, writer);
     }
 }

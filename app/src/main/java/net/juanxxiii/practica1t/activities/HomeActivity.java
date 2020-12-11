@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,6 +23,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.google.android.material.navigation.NavigationView;
 
 import net.juanxxiii.practica1t.R;
+import net.juanxxiii.practica1t.domain.MyLocation;
 import net.juanxxiii.practica1t.services.GpsService;
 
 import static net.juanxxiii.practica1t.common.Constants.INTENT_LOCALIZATION_ACTION;
@@ -109,15 +111,23 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.sportFacilities:
                 Intent sportIntent = new Intent(HomeActivity.this, SportsCentersActivity.class);
-                sportIntent.putExtra(LATITUDE, latitude);
-                sportIntent.putExtra(LONGITUDE, longitude);
                 startActivity(sportIntent);
                 break;
             case R.id.sportPools:
                 Intent poolIntent = new Intent(HomeActivity.this, PoolsActivity.class);
-                poolIntent.putExtra(LATITUDE, latitude);
-                poolIntent.putExtra(LONGITUDE, longitude);
                 startActivity(poolIntent);
+                break;
+            case R.id.saveLocation:
+                MyLocation myLocation = new MyLocation(latitude, longitude);
+                SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("LocationSaved",Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPref.edit();
+                editor.putString(getString(R.string.saved_location), myLocation.toString());
+                editor.apply();
+                Toast.makeText(HomeActivity.this, "Location saved", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.relevantSites:
+                Intent relevantIntent = new Intent(HomeActivity.this, RelevantSitesActivity.class);
+                startActivity(relevantIntent);
                 break;
             default:
                 Log.d(TAG,"seleccion menu" +  item.toString());

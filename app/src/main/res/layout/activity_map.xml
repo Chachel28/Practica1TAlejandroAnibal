@@ -3,11 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.MapActivity">
+    tools:context=".activities.MapActivity"
+    android:orientation="vertical">
 
     <org.osmdroid.views.MapView
         android:id="@+id/openmapview"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"/>
-
 </LinearLayout>
