@@ -1,8 +1,10 @@
 package net.juanxxiii.practica1t.activities;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -54,10 +56,11 @@ public class SportsCentersActivity extends AppCompatActivity {
             }
         });
 
-        Intent intent = getIntent();
-        double latitude = intent.getDoubleExtra(LATITUDE, 0);
-        double longitude = intent.getDoubleExtra(LONGITUDE, 0);
-        Log.d(TAG, "sport " + latitude + " - " + longitude);
+        SharedPreferences sharedPref2 = getApplicationContext().getSharedPreferences("LocationSaved", Context.MODE_PRIVATE);
+        String locationParseable = sharedPref2.getString(getString(R.string.saved_location), "");
+        String[] splitted = locationParseable.split(" ");
+        double latitude = Double.parseDouble(splitted[0]);
+        double longitude = Double.parseDouble(splitted[1]);
 
         getAllFacilites(latitude, longitude);
 
@@ -71,7 +74,7 @@ public class SportsCentersActivity extends AppCompatActivity {
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                write(getFilesDir()+"/favourites.json", sportCenters);
+
                             }
                         })
                         .setNegativeButton("No", null).show();
@@ -104,17 +107,5 @@ public class SportsCentersActivity extends AppCompatActivity {
 
             }
         });
-    }
-
-    //getFileDir()+/user.json
-    public void write(String file, List<Graph> objeto) {
-        Writer writer = null;
-        try {
-            writer = new FileWriter(file);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        gson.toJson(objeto, writer);
     }
 }

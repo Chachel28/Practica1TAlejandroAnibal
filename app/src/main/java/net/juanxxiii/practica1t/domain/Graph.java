@@ -6,9 +6,6 @@ public class Graph {
 
     @Override
     public String toString() {
-        return "Graph{" +
-                "name='" + title + '\'' +
-                ", location=" + location +
-                '}';
+        return title;
     }
 }

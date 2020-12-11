@@ -59,27 +59,9 @@ public class FavouritesActivity extends AppCompatActivity {
             }
         });
 
-        favourites = new ArrayList<String>();
-        favourites.add("Veracruz");
-        favourites.add("Tabasco");
-        favourites.add("Chiapas");
-        favourites.add("Campeche");
-        favourites.add("Quintana Roo");
-
+        favourites = new ArrayList<>();
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, favourites);
         listview.setAdapter(adapter);
     }
-
-    /*public void read(String file) {
-        Reader reader = null;
-        try {
-            reader = new FileReader(file);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        Gson gson = new Gson();
-        Type types = new TypeToken<ArrayList<Graph>().getTypes();
-        Graph graph = gson.fromJson(reader, types);
-    }*/
 }

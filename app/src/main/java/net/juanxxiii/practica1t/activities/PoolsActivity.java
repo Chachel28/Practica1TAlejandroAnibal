@@ -67,9 +67,11 @@ public class PoolsActivity extends AppCompatActivity {
             }
         });
 
-        Intent intent = getIntent();
-        double latitude = intent.getDoubleExtra(LATITUDE, 0);
-        double longitude = intent.getDoubleExtra(LONGITUDE, 0);
+        SharedPreferences sharedPref2 = getApplicationContext().getSharedPreferences("LocationSaved", Context.MODE_PRIVATE);
+        String locationParseable = sharedPref2.getString(getString(R.string.saved_location), "");
+        String[] splitted = locationParseable.split(" ");
+        double latitude = Double.parseDouble(splitted[0]);
+        double longitude = Double.parseDouble(splitted[1]);
 
         getAllFacilites(latitude, longitude);
     }

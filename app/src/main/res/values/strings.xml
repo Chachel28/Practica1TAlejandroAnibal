@@ -9,4 +9,5 @@
     <string name="sportPools">Sports pools</string>
     <string name="relevantSites">Relevant sites</string>
     <string name="favourites">Favourites</string>
+    <string name="saved_location">savedLocation</string>
 </resources>
