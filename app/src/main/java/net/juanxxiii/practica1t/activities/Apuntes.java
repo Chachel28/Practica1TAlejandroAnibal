@@ -35,5 +35,67 @@ public class Apuntes {
     * objeto = gsonFromJson(reader, types);
     * }
     *
+    * package com.example.practica_moviles.impl;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.example.practica_moviles.R;
+import com.example.practica_moviles.domain.ModeloJson;
+
+import java.util.List;
+
+public class ViewAdapter extends BaseAdapter {
+    private Context context;
+    private int layout;
+    private List<ModeloJson> ubicacion;
+    private int tipo;
+
+    public ViewAdapter(Context mContext, int layout, List<ModeloJson> ubicacion, int tipo) {
+        this.context = mContext;
+        this.layout = layout;
+        this.ubicacion = ubicacion;
+        this.tipo = tipo;
+    }
+
+    @Override
+    public int getCount() {
+        return ubicacion.size();
+    }
+
+    @Override
+    public Object getItem(int position) {
+        return ubicacion.get(position);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+
+        if(convertView == null){
+            LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = layoutInflater.inflate(R.layout.row_listview,null);
+        }
+        ImageView imagen = convertView.findViewById(R.id.imagen);
+        if(tipo==1) {
+            imagen.setImageResource(R.drawable.deportito);
+        }else if(tipo==2){
+            imagen.setImageResource(R.drawable.piscinita);
+        }
+        TextView titulo = convertView.findViewById(R.id.titulo);
+        titulo.setText(ubicacion.get(position).getTitulo());
+        return convertView;
+    }
+
+}
     * */
 }

@@ -19,6 +19,8 @@ import com.google.gson.GsonBuilder;
 
 import net.juanxxiii.practica1t.R;
 import net.juanxxiii.practica1t.common.Constants;
+import net.juanxxiii.practica1t.common.FavouriteManager;
+import net.juanxxiii.practica1t.common.ViewAdapter;
 import net.juanxxiii.practica1t.domain.Graph;
 import net.juanxxiii.practica1t.domain.JsonResponse;
 import net.juanxxiii.practica1t.interfaces.ApiDatosMadrid;
@@ -42,6 +44,9 @@ public class SportsCentersActivity extends AppCompatActivity {
     public final String TAG = getClass().getName();
     public ListView listview;
     public List<Graph> sportCenters;
+    public List<Graph> favourites;
+    public ViewAdapter adapter;
+    public FavouriteManager favouriteManager = new FavouriteManager();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,11 +54,12 @@ public class SportsCentersActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sport_facilities);
 
         listview = findViewById(R.id.listViewPoolsFacilities);
-        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                //Funcion para ir a dicha ubicación
-            }
+        listview.setOnItemClickListener((parent, view, position, id) -> {
+            Graph selected = adapter.getItem(position);
+            Intent mapIntent = new Intent(SportsCentersActivity.this, MapActivity.class);
+            mapIntent.putExtra(LATITUDE, selected.location.latitude);
+            mapIntent.putExtra(LONGITUDE, selected.location.longitude);
+            startActivity(mapIntent);
         });
 
         SharedPreferences sharedPref2 = getApplicationContext().getSharedPreferences("LocationSaved", Context.MODE_PRIVATE);
@@ -64,22 +70,19 @@ public class SportsCentersActivity extends AppCompatActivity {
 
         getAllFacilites(latitude, longitude);
 
-        listview.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                new AlertDialog.Builder(SportsCentersActivity.this)
-                        .setIcon(android.R.drawable.star_big_on)
-                        .setTitle("Add to favourites?")
-                        .setMessage("Are you sure you want add this to your favourites page?")
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-
-                            }
-                        })
-                        .setNegativeButton("No", null).show();
-                return true;
-            }
+        listview.setOnItemLongClickListener((adapterView, view, i, l) -> {
+            new AlertDialog.Builder(SportsCentersActivity.this)
+                    .setIcon(android.R.drawable.star_big_on)
+                    .setTitle("Add to favourites?")
+                    .setMessage("Are you sure you want add this to your favourites page?")
+                    .setPositiveButton("Yes", (dialogInterface, i1) -> {
+                        favouriteManager.addFavourite(adapter.getItem(i), SportsCentersActivity.this);
+                        Intent recharge = new Intent(SportsCentersActivity.this, SportsCentersActivity.class);
+                        startActivity(recharge);
+                        finish();
+                    })
+                    .setNegativeButton("No", null).show();
+            return true;
         });
     }
 
@@ -97,7 +100,8 @@ public class SportsCentersActivity extends AppCompatActivity {
                 Log.d(TAG, "respuesta positiva peticion");
                 if (response.body() != null) {
                     sportCenters = response.body().graph;
-                    ArrayAdapter<Graph> adapter = new ArrayAdapter<>(SportsCentersActivity.this, android.R.layout.simple_list_item_1, sportCenters);
+                    favourites = favouriteManager.readFavourites(SportsCentersActivity.this);
+                    adapter = new ViewAdapter(SportsCentersActivity.this, sportCenters, 1, favourites);
                     listview.setAdapter(adapter);
                 }
             }

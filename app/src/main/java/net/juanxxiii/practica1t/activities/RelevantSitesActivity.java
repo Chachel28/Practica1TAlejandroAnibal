@@ -41,13 +41,10 @@ public class RelevantSitesActivity extends AppCompatActivity {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, sites);
         listview.setAdapter(adapter);
 
-        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                mWebView.setVisibility(View.VISIBLE);
-                Log.d(TAG, view.toString());
-                mWebView.loadUrl((String) listview.getItemAtPosition(i));
-            }
+        listview.setOnItemClickListener((adapterView, view, i, l) -> {
+            mWebView.setVisibility(View.VISIBLE);
+            Log.d(TAG, view.toString());
+            mWebView.loadUrl((String) listview.getItemAtPosition(i));
         });
     }
 }

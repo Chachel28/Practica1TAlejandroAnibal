@@ -3,8 +3,10 @@ package net.juanxxiii.practica1t.domain;
 import java.io.Serializable;
 
 public class MyLocation implements Serializable {
-    private double latitude;
-    private double longitude;
+
+    private static final long serialVersionUID = 6529685098267757690L;
+    public double latitude;
+    public double longitude;
 
     public MyLocation(Double latitude, Double longitude) {
         this.latitude = latitude;
