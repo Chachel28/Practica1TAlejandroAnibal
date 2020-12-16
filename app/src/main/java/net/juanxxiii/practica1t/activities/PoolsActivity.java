@@ -16,6 +16,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import net.juanxxiii.practica1t.R;
 import net.juanxxiii.practica1t.common.Constants;
+import net.juanxxiii.practica1t.common.FavouriteManager;
+import net.juanxxiii.practica1t.common.ViewAdapter;
 import net.juanxxiii.practica1t.domain.Graph;
 import net.juanxxiii.practica1t.domain.JsonResponse;
 import net.juanxxiii.practica1t.interfaces.ApiDatosMadrid;
@@ -36,35 +38,39 @@ public class PoolsActivity extends AppCompatActivity {
 
     public ListView listview;
     public List<Graph> facilities;
+    public List<Graph> favourites;
+    public ViewAdapter adapter;
+    public FavouriteManager favouriteManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pools_facilites);
 
         listview = findViewById(R.id.listViewPoolsFacilities);
-        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                //Funcion para ir a dicha ubicación
-            }
+        listview.setOnItemClickListener((parent, view, position, id) -> {
+            Graph selected = adapter.getItem(position);
+            Intent mapIntent = new Intent(PoolsActivity.this, MapActivity.class);
+            mapIntent.putExtra(LATITUDE, selected.location.latitude);
+            mapIntent.putExtra(LONGITUDE, selected.location.longitude);
+            startActivity(mapIntent);
         });
 
-        listview.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                new AlertDialog.Builder(PoolsActivity.this)
-                        .setIcon(android.R.drawable.star_big_on)
-                        .setTitle("Add to favourites?")
-                        .setMessage("Are you sure you want add this to your favourites page?")
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
+        favouriteManager = new FavouriteManager();
 
-                            }
-                        })
-                        .setNegativeButton("No", null).show();
-                return true;
-            }
+        listview.setOnItemLongClickListener((adapterView, view, position, id) -> {
+            new AlertDialog.Builder(PoolsActivity.this)
+                    .setIcon(android.R.drawable.star_big_on)
+                    .setTitle("Add to favourites?")
+                    .setMessage("Are you sure you want add this to your favourites page?")
+                    .setPositiveButton("Yes", (dialogInterface, i1) -> {
+                        favouriteManager.addFavourite(adapter.getItem(position), PoolsActivity.this);
+                        Intent recharge = new Intent(PoolsActivity.this, PoolsActivity.class);
+                        startActivity(recharge);
+                        finish();
+                    })
+                    .setNegativeButton("No", null).show();
+            return true;
         });
 
         SharedPreferences sharedPref2 = getApplicationContext().getSharedPreferences("LocationSaved", Context.MODE_PRIVATE);
@@ -76,19 +82,20 @@ public class PoolsActivity extends AppCompatActivity {
         getAllFacilites(latitude, longitude);
     }
 
-    private void getAllFacilites(Double latitude, Double longitude){
+    private void getAllFacilites(Double latitude, Double longitude) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(Constants.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
         ApiDatosMadrid apiDatosMadrid = retrofit.create(ApiDatosMadrid.class);
-        apiDatosMadrid.getPoolList(latitude,longitude, Constants.DISTANCE).enqueue(new Callback<JsonResponse>() {
+        apiDatosMadrid.getPoolList(latitude, longitude, Constants.DISTANCE).enqueue(new Callback<JsonResponse>() {
             @Override
             public void onResponse(Call<JsonResponse> call, Response<JsonResponse> response) {
                 if (response.body() != null) {
                     facilities = response.body().graph;
-                    ArrayAdapter<Graph> adapter = new ArrayAdapter<>(PoolsActivity.this, android.R.layout.simple_list_item_1, facilities);
+                    favourites = favouriteManager.readFavourites(PoolsActivity.this);
+                    adapter = new ViewAdapter(PoolsActivity.this, facilities, 2, favourites);
                     listview.setAdapter(adapter);
                 }
             }

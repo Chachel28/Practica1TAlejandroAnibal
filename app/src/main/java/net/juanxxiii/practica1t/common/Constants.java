@@ -8,4 +8,5 @@ public class Constants {
     public static final String BASE_URL = "https://datos.madrid.es/egob/catalogo/";
     public static final String ENDPOINT_PISCINAS = "210227-0-piscinas-publicas.json";
     public static final String ENDPOINT_CENTROS_DEPORTIVOS = "200215-0-instalaciones-deportivas.json";
+    public static final String FILE = "favourites.txt";
 }
